@@ -10,6 +10,15 @@
       (pointercancel)="onPointerUp($event, i)"
       (pointerleave)="onPointerUp($event, i)">
       <img [src]="person.image" [alt]="person.name || 'card image'" draggable="false" />
+      <div class="bottom-fade"></div>
     </div>
   }
+  <div class="overlay">
+    <h2>{{ persons[0]?.name }}</h2>
+    <p>{{ persons[0]?.description }}</p>
+    <div class="actions">
+      <button class="action-btn dislike-btn" (click)="swipeLeft()" aria-label="Dislike">👎</button>
+      <button class="action-btn like-btn" (click)="swipeRight()" aria-label="Like">👍</button>
+    </div>
+  </div>
 </div>

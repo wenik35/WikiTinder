@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, Output, Renderer2, ViewChildren, QueryList } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer2, ViewChildren, QueryList } from '@angular/core';
 
 import { Person } from '../person';
 
@@ -9,7 +9,7 @@ import { Person } from '../person';
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.scss']
 })
-export class CardComponent {
+export class CardComponent implements OnInit, OnDestroy {
   @Input() persons: Person[] = [];
   @Output() swiped = new EventEmitter<'left' | 'right'>();
 
@@ -21,6 +21,66 @@ export class CardComponent {
   private pointerId: number | null = null;
 
   constructor(private renderer: Renderer2) {}
+
+  private keyUnlisten: (() => void) | null = null;
+
+  // Programmatic swipe triggers for buttons
+  swipeRight() {
+    this.programmaticSwipe('right');
+  }
+
+  swipeLeft() {
+    this.programmaticSwipe('left');
+  }
+
+  private programmaticSwipe(direction: 'left' | 'right') {
+    if (this.dragging) return; // avoid interrupting an active drag
+    const cards = this.cardRefs.toArray();
+    if (cards.length === 0) return;
+    const elRef = cards[0];
+    const el = elRef.nativeElement as HTMLElement;
+
+    const offscreenX = (direction === 'right' ? 1 : -1) * window.innerWidth * 1.5;
+    const rotate = direction === 'right' ? 20 : -20;
+
+    this.renderer.setStyle(el, 'transition', 'transform 300ms ease-out, opacity 300ms');
+    this.renderer.setStyle(el, 'transform', `translate3d(${offscreenX}px, 0, 0) rotate(${rotate}deg)`);
+    this.renderer.setStyle(el, 'opacity', '0');
+
+    setTimeout(() => {
+      this.renderer.setStyle(el, 'visibility', 'hidden');
+      this.renderer.setStyle(el, 'transition', 'none');
+      this.renderer.setStyle(el, 'transform', 'translate3d(0, 0, 0)');
+      this.renderer.setStyle(el, 'opacity', '1');
+      this.swiped.emit(direction);
+    }, 320);
+  }
+
+  ngOnInit(): void {
+    // Listen on window for keyboard arrow presses
+    this.keyUnlisten = this.renderer.listen('window', 'keydown', (ev: KeyboardEvent) => this.onKeydown(ev));
+  }
+
+  ngOnDestroy(): void {
+    if (this.keyUnlisten) {
+      this.keyUnlisten();
+      this.keyUnlisten = null;
+    }
+  }
+
+  private onKeydown(event: KeyboardEvent) {
+    const target = event.target as HTMLElement | null;
+    if (target) {
+      const tag = target.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || target.isContentEditable) return;
+    }
+
+    if (event.key === 'ArrowLeft') {
+      this.swipeLeft();
+    } else if (event.key === 'ArrowRight') {
+      this.swipeRight();
+    }
+  }
 
   onPointerDown(event: PointerEvent, index: number) {
     if (index !== 0) return; // only top card is interactive

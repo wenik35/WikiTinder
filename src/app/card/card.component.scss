@@ -1,8 +1,8 @@
 
 .card-stack {
-  width: 320px;
+  width: 30vw;
   max-width: 90vw;
-  height: 420px;
+  height: 90vh;
   position: relative;
 }
 
@@ -11,7 +11,7 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   border-radius: 12px;
   display: block;
   z-index: 0;
@@ -39,4 +39,69 @@
   height: 100%;
   object-fit: cover;
   display: block;
+}
+
+.overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0 12px;
+  z-index: 10000;
+  color: #fff;
+  pointer-events: auto; /* allow overlay and its children to receive clicks */
+  transform: translateZ(0); /* create a stacking context above transformed cards */
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 12px;
+  pointer-events: auto;
+}
+
+.action-btn {
+  pointer-events: auto;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  background: rgba(255,255,255,0.95);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  cursor: pointer !important;
+  z-index: 10001;
+  transform: translateZ(0);
+}
+
+/* ensure any button inside actions shows pointer cursor */
+.actions button {
+  cursor: pointer !important;
+}
+
+.like-btn {
+  color: #0a8f3a;
+}
+
+.dislike-btn {
+  color: #d23f3f;
+}
+
+.bottom-fade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 20%;
+  background: linear-gradient(transparent, rgba(0,0,0,0.9));
+  pointer-events: none;
+  z-index: 2;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
 }
