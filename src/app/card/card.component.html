@@ -1,13 +1,15 @@
 <div class="card-stack">
-	<img *ngIf="backImageSrc" class="back-image" [src]="backImageSrc" [alt]="alt || 'back image'" draggable="false" />
-
-	<div #card
-			 class="card card-top"
-			 (pointerdown)="onPointerDown($event)"
-			 (pointermove)="onPointerMove($event)"
-			 (pointerup)="onPointerUp($event)"
-			 (pointercancel)="onPointerUp($event)"
-			 (pointerleave)="onPointerUp($event)">
-		<img [src]="imageSrc" [alt]="alt || 'card image'" draggable="false" />
-	</div>
+	<ng-container *ngFor="let person of persons; let i = index">
+		<div #card
+			 class="card"
+			 [class.card-top]="i === 0"
+			 [style.zIndex]="persons.length - i"
+			 (pointerdown)="onPointerDown($event, i)"
+			 (pointermove)="onPointerMove($event, i)"
+			 (pointerup)="onPointerUp($event, i)"
+			 (pointercancel)="onPointerUp($event, i)"
+			 (pointerleave)="onPointerUp($event, i)">
+			<img [src]="person.image" [alt]="person.name || 'card image'" draggable="false" />
+		</div>
+	</ng-container>
 </div>

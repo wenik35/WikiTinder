@@ -1,7 +1,6 @@
 <div style="margin-top:1.5rem; display:flex; justify-content:center; overflow: hidden;">
   <app-card
-    [imageSrc]="this.next[0]?.image ?? ''"
-    [backImageSrc]="this.next[1]?.image ?? ''"
+    [persons]="this.next"
     (swiped)="onSwiped($event)">
   </app-card>
 </div>
