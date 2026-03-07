@@ -1,0 +1,13 @@
+<div class="card-stack">
+	<img *ngIf="backImageSrc" class="back-image" [src]="backImageSrc" [alt]="alt || 'back image'" draggable="false" />
+
+	<div #card
+			 class="card card-top"
+			 (pointerdown)="onPointerDown($event)"
+			 (pointermove)="onPointerMove($event)"
+			 (pointerup)="onPointerUp($event)"
+			 (pointercancel)="onPointerUp($event)"
+			 (pointerleave)="onPointerUp($event)">
+		<img [src]="imageSrc" [alt]="alt || 'card image'" draggable="false" />
+	</div>
+</div>
