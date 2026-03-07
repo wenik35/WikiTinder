@@ -11,18 +11,19 @@ import { Person } from './person';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  constructor(private dbpediaService: DbpediaApiService) {
-    this.dbpediaService.getRandomPerson().then(person => this.next.push(person));
-    this.dbpediaService.getRandomPerson().then(person => this.next.push(person));
+  public dbPediaService: DbpediaApiService;
+
+  constructor(dbpediaService: DbpediaApiService) {
+    this.dbPediaService = dbpediaService;
   }
 
   private log: Person[] = [];
-  public next: Person[] = [];
 
   onSwiped(direction: 'left' | 'right') {
-    let person = this.next.shift()!;
+    let person = this.dbPediaService.buffer.shift()!;
     person.known = direction === 'right';
     this.log.push(person);
-    this.dbpediaService.getRandomPerson().then(person => this.next.push(person));
+
+    this.dbPediaService.increaseBuffer(1);
   }
 }

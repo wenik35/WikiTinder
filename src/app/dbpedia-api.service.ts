@@ -9,9 +9,14 @@ export class DbpediaApiService {
   private randomPersonUrl = 'https://dbpedia.org/sparql/?default-graph-uri=http%3A%2F%2Fdbpedia.org&query=PREFIX+dbo%3A+<http%3A%2F%2Fdbpedia.org%2Fontology%2F>%0D%0ASELECT+%3Fperson%2C+%3Fimage%0D%0AWHERE+%7B%0D%0A++%3Fperson+a+dbo%3APerson+.%0D%0A++%3Fperson+dbo%3Athumbnail+%3Fimage%0D%0A%7D%0D%0AOFFSET+{offset}%0D%0ALIMIT+1&format=application%2Fsparql-results%2Bjson&timeout=30000&signal_void=on&signal_unconnected=on';
 
   private totalEntries: number = 0;
+  public buffer: Person[] = [];
 
   constructor() {
-    this.setEntryCount().catch(error => {
+    this.setEntryCount()
+    .then(() => {
+      this.increaseBuffer(10); // Preload some entries
+    })
+    .catch(error => {
       console.error('Error fetching entry count:', error);
     });
   }
@@ -23,7 +28,15 @@ export class DbpediaApiService {
     });
   }
 
-  public getRandomPerson(): Promise<Person> {
+  public increaseBuffer(count: number): void {
+    for (let i = 0; i < count; i++) {
+      this.getRandomPerson().then(person => {
+        this.buffer.push(person);
+      });
+    }
+  }
+
+  private getRandomPerson(): Promise<Person> {
     const randomOffset = Math.floor(Math.random() * this.totalEntries);
     const url = this.randomPersonUrl.replace('{offset}', randomOffset.toString());
     

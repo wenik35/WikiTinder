@@ -1,11 +1,11 @@
 import { Component, ElementRef, EventEmitter, Input, Output, Renderer2, ViewChildren, QueryList } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Person } from '../person';
 
 @Component({
   selector: 'app-card',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.scss']
 })
