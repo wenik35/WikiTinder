@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, Renderer2, ViewChildren, QueryList } from '@angular/core';
 
-import { Person } from '../person';
+import { Person } from '../api/person';
 
 @Component({
   selector: 'app-card',

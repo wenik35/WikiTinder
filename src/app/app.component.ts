@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CardComponent } from './card/card.component';
-import { DbpediaApiService } from './dbpedia-api.service';
-import { Person } from './person';
+import { DbpediaApiService } from './api/dbpedia-api.service';
+import { Person } from './api/person';
 
 @Component({
   selector: 'app-root',
