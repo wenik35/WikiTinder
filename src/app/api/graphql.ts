@@ -1,4 +1,4 @@
-export class GraphQLContext {
+export class SPARQLContext {
     private endpoint: string = 'https://dbpedia.org/sparql';
     private options: string = '&format=application%2Fsparql-results%2Bjson&timeout=30000&signal_void=on&signal_unconnected=on';
     private queryTemplate: string = '?default-graph-uri=http%3A%2F%2Fdbpedia.org&query=';

@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { CardComponent } from './card/card.component';
 import { DbpediaApiService } from './api/dbpedia-api.service';
 import { Person } from './api/person';
+import { SettingsComponent } from "./settings/settings.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CardComponent],
+  imports: [CardComponent, SettingsComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

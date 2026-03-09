@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Person } from './person';
-import { GraphQLContext } from './graphql';
+import { SPARQLContext } from './graphql';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DbpediaApiService {
   private totalEntries: number = 0;
-  private graphQLContext = new GraphQLContext();
+  private graphQLContext = new SPARQLContext();
 
   constructor() {
     this.setEntryCount()
