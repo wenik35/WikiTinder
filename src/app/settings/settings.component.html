@@ -1,45 +1,54 @@
-<button command="show-modal" commandfor="my-dialog">Open dialog</button>
+<div class="settings-container">
+    <h1>Settings</h1>
 
-<dialog id="my-dialog">
-    <div class="modal-header">
-        <h3>Settings</h3>
-    </div>
-
-    <div class="modal-body">
-        <div>
-            <input type="checkbox" id="showName" name="showName" [(ngModel)]="settings.showName">
-            <label for="showName">Show Name</label>
-        </div>
-        <div>
-            <input type="checkbox" id="showDescription" name="showDescription" [(ngModel)]="settings.showDescription">
-            <label for="showDescription">Show Description</label>
-        </div>
-        <div>
-            <input type="checkbox" id="onlyLivingPeople" name="onlyLivingPeople" [(ngModel)]="settings.onlyLivingPeople">
-            <label for="onlyLivingPeople">Only Living People</label>
-        </div>
-        <div>
-            <input type="checkbox" id="onlyWithImages" name="onlyWithImages" [(ngModel)]="settings.onlyWithImages">
-            <label for="onlyWithImages">Only With Images</label>
-        </div>
-        <div>
-            <input type="checkbox" id="onlyWithPreferredLanguage" name="onlyWithPreferredLanguage" [(ngModel)]="settings.onlyWithPreferredLanguage">
-            <label for="onlyWithPreferredLanguage">Only With Preferred Language</label>
-        </div>
-        <div>
-            <label for="preferredLanguage">Preferred Language:</label>
-            <div cdkDropList (cdkDropListDropped)="onDrop($event)">
-                @for (language of this.settings.languagePreferences; track language) {
-                    <div class="example-box" cdkDrag>{{ language }}</div>
-                }
+    <h3>Display Options</h3>
+    <label for="showName">
+        <input type="checkbox" id="showName" name="showName" [(ngModel)]="settings.showName">
+        Show Name
+    </label>
+    <label for="showDescription">
+        <input type="checkbox" id="showDescription" name="showDescription" [(ngModel)]="settings.showDescription">
+        Show Description
+    </label>
+    
+    <h3>Filter Options</h3>
+    <label for="onlyLivingPeople">
+        <input type="checkbox" id="onlyLivingPeople" name="onlyLivingPeople" [(ngModel)]="settings.onlyLivingPeople">
+        Only Living People
+    </label>
+    <label for="onlyWithImages">
+        <input type="checkbox" id="onlyWithImages" name="onlyWithImages" [(ngModel)]="settings.onlyWithImages">
+        Only With Images
+    </label>
+    <label for="onlyWithPreferredLanguage">
+        <input type="checkbox" id="onlyWithPreferredLanguage" name="onlyWithPreferredLanguage" [(ngModel)]="settings.onlyWithPreferredLanguage">
+        Show only entries with a description in a preferred language
+    </label>
+    <div>
+        <label for="preferredLanguage">Preferred Languages:</label>
+        <div cdkDropList (cdkDropListDropped)="onDrop($event)" class="language-container">
+            @for (language of this.settings.languagePreferences; track language) {
+                <div class="language-box" cdkDrag>
+                    {{ language }}
+                    <button class="remove-button" (click)="this.removeLanguage(language)">x</button>
+                </div>
+            }
+            <div class="language-box">
+                <input
+                    class="language-input"
+                    type="text"
+                    id="preferredLanguage"
+                    name="preferredLanguage"
+                    placeholder="Add language and press Enter"
+                    (keydown.enter)="this.addLanguage($event)"
+                >
             </div>
         </div>
     </div>
 
-    <div class="modal-footer">
-        <button onclick="this.settingsService.resetSettings(); this.settings = this.settingsService.settings;">Reset to Default</button>
-        <button onclick="this.save()">Save</button>
-        <button commandfor="my-dialog" command="close" onclick="this.save()">Save and close</button>
-        <button commandfor="my-dialog" command="close">Close</button>
+    <div class="button-container">
+        <span>Number of persons found with the current settings: {{ this.apiService.totalEntries }}</span>
+        <button (click)="this.reset()">Reset to Default</button>
+        <button (click)="this.save()">Save</button>
     </div>
-</dialog>
+</div>

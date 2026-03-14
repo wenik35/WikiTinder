@@ -1,8 +1,4 @@
-<app-settings></app-settings>
-
-<div style="margin-top:1.5rem; display:flex; justify-content:center; overflow: hidden;">
-  <app-card
-    [persons]="this.dbPediaService.buffer"
-    (swiped)="onSwiped($event)">
-  </app-card>
-</div>
+<router-outlet>
+  <a href="/">Game</a>
+  <a href="/settings">Settings</a>
+</router-outlet>

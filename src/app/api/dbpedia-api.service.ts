@@ -1,19 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Person } from './person';
-import { SPARQLContext } from './graphql';
+import { SPARQLContext } from './sparql';
+import { SettingsService } from '../settings/settings.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DbpediaApiService {
-  private totalEntries: number = 0;
-  private graphQLContext = new SPARQLContext();
+  public totalEntries: number = 0;
+  
+  private sparqlContext = new SPARQLContext();
 
-  constructor() {
-    this.setEntryCount()
-    .then(() => {
-      this.increaseBuffer(10); // Preload some entries
-    })
+  constructor(private settingsService: SettingsService) {
+    this.updateEntryCount()
     .catch(error => {
       console.error('Error fetching entry count:', error);
     });
@@ -21,12 +20,15 @@ export class DbpediaApiService {
 
   public buffer: Person[] = [];
 
-  private setEntryCount(): Promise<void> {
-    const url = this.graphQLContext.buildUrl(this.graphQLContext.countQuery);
+  public updateEntryCount(): Promise<void> {
+    const url = this.sparqlContext.queryCount(this.settingsService.settings);
 
     return fetch(url).then(response => response.json()).then(data => {
       const count = data.results.bindings[0]['callret-0'].value;
       this.totalEntries = parseInt(count, 10);
+
+      this.buffer = [];
+      this.increaseBuffer(10);
     });
   }
 
@@ -40,7 +42,7 @@ export class DbpediaApiService {
 
   private getRandomPerson(): Promise<Person> {
     const randomOffset = Math.floor(Math.random() * this.totalEntries);
-    const url = this.graphQLContext.buildUrl(this.graphQLContext.personQuery.replace('{offset}', randomOffset.toString()));
+    const url = this.sparqlContext.queryPerson(this.settingsService.settings, randomOffset);
 
     return fetch(url).then(response => response.json()).then(data => {
       const binding = data.results.bindings[0];

@@ -1,0 +1,6 @@
+<div style="margin-top:1.5rem; display:flex; justify-content:center; overflow: hidden;">
+  <app-card
+    [persons]="this.dbPediaService.buffer"
+    (swiped)="onSwiped($event)">
+  </app-card>
+</div>
